@@ -66,25 +66,21 @@ public class Game {
   private void displayGameOutcome(boolean playerBusted) {
     if (playerBusted) {
       System.out.println("You Busted, so you lose.  💸");
-    } else if (dealerBusted()) {
+    } else if (dealerHand.isBusted()) {
       System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
-    } else if (dealerHand.value() < playerHand.value()) {
+    } else if (playerHand.beats(dealerHand)) {
       System.out.println("You beat the Dealer! 💵");
-    } else if (dealerHand.value() == playerHand.value()) {
+    } else if (playerHand.pushesWith(dealerHand)) {
       System.out.println("Push: The house wins, you Lose. 💸");
     } else {
       System.out.println("You lost to the Dealer. 💸");
     }
   }
 
-  private boolean dealerBusted() {
-    return dealerHand.value() > 21;
-  }
-
   private void dealerPlays(boolean playerBusted) {
     // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>stand)
     if (!playerBusted) {
-      while (dealerHand.value() <= 16) {
+      while (dealerHand.hasValueLessThanOrEqualTo(16)) {
         dealerHand.drawCardFrom(deck);
       }
     }
@@ -100,7 +96,7 @@ public class Game {
       }
       if (playerHits(playerChoice)) {
         playerHand.drawCardFrom(deck);
-        if (playerBusted()) {
+        if (playerHand.isBusted()) {
           playerBusted = true;
         }
       } else {
@@ -108,10 +104,6 @@ public class Game {
       }
     }
     return playerBusted;
-  }
-
-  private boolean playerBusted() {
-    return playerHand.value() > 21;
   }
 
   private boolean playerHits(String playerChoice) {
@@ -174,13 +166,13 @@ public class Game {
   private void displayPlayerHand() {
     System.out.println("Player has: ");
     playerHand.display();
-    System.out.println(" (" + playerHand.value() + ")");
+    System.out.println(" (" + playerHand.displayValue() + ")");
   }
 
   private void displayFinalDealerHand() {
     System.out.println("Dealer has: ");
     dealerHand.display();
-    System.out.println(" (" + dealerHand.value() + ")");
+    System.out.println(" (" + dealerHand.displayValue() + ")");
   }
 
 }

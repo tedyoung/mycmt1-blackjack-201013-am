@@ -16,7 +16,7 @@ public class Hand {
     this.cards.addAll(cards);
   }
 
-  int value() {
+  private int value() {
     int handValue = cards
         .stream()
         .mapToInt(Card::rankValue)
@@ -48,5 +48,29 @@ public class Hand {
 
   void drawCardFrom(Deck deck) {
     cards.add(deck.draw());
+  }
+
+  boolean isBusted() {
+    return value() > 21;
+  }
+
+  boolean pushesWith(Hand hand) {
+    return hand.value() == value();
+  }
+
+  boolean beats(Hand hand) {
+    return hand.value() < value();
+  }
+
+  boolean hasValueLessThanOrEqualTo(int target) {
+    return value() <= target;
+  }
+
+  String displayValue() {
+    return String.valueOf(value());
+  }
+
+  public boolean valueEquals(int target) {
+    return value() == target;
   }
 }
